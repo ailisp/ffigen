@@ -1574,7 +1574,8 @@ OBJS = \
 	xcoffout.o \
 	$(out_object_file) \
 	$(EXTRA_OBJS) \
-	$(host_hook_obj)
+	$(host_hook_obj) \
+	ffigen.o
 
 # Objects in libcommon.a, potentially used by all host binaries and with
 # no target dependencies.
@@ -2572,6 +2573,8 @@ generated_files = config.h tm.h $(TM_P_H) $(TM_H) multilib.h \
 build/%.o :  # dependencies provided by explicit rule later
 	$(COMPILER_FOR_BUILD) -c $(BUILD_COMPILERFLAGS) $(BUILD_CPPFLAGS) \
 		-o $@ $<
+
+build/ffigen.o: ffigen.c ffigen.h $(CONFIG_H) system.h $(TREE_H) coretypes.h $(TM_H)
 
 ## build/version.o is compiled by the $(COMPILER_FOR_BUILD) but needs
 ## several C macro definitions, just like version.o
