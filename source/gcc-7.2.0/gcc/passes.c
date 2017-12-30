@@ -61,6 +61,8 @@ along with GCC; see the file COPYING3.  If not see
 #include "tree-cfgcleanup.h"
 #include "insn-addr.h" /* for INSN_ADDRESSES_ALLOC.  */
 
+#include "ffigen.h"
+
 using namespace gcc;
 
 /* This is used for debugging.  It allows the current pass to printed
@@ -319,6 +321,9 @@ rest_of_decl_compilation (tree decl,
 	 errors.  */
       && !seen_error ())
     (*debug_hooks->early_global_decl) (decl);
+    
+  if (flag_syntax_only)
+    ffi_rest_of_decl_compilation (decl, top_level, at_end);
 }
 
 /* Called after finishing a record, union or enumeral type.  */
