@@ -87,7 +87,8 @@ all: package
 	m4 -DPLATFORM=$(PLATFORM) -DGCC_VERSION=$(GCC_VERSION)-$(NOW) source/INSTALL-$(PLATFORM).m4 > INSTALL-FFIGEN-$(PLATFORM)-gcc-$(GCC_VERSION)-$(NOW).txt
 
 
-compile: mkdir build
+compile: 
+	mkdir build
 	(cd build ; ../gcc-$(GCC_VERSION)/configure --enable-languages=objc $(CONFIGARGS) )
 ifeq ($(MAKE_FUNKY_LINK),YES)
 ifeq ($(OS),Darwin)
