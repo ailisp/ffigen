@@ -3,7 +3,8 @@ NOW = $(shell date -u "+%F-%H-%M-%S")
 TAR = tar
 EXE =
 
-GCC_VERSION = 7.2.0
+GCC_VERSION = 4.0.0
+ARCHIVES = gcc-core-$(GCC_VERSION).tar.bz2 gcc-objc-$(GCC_VERSION).tar.bz2
 
 ifeq ($(OS),Linux)
 ARCH = $(shell uname -m)
@@ -87,7 +88,8 @@ all: package
 	m4 -DPLATFORM=$(PLATFORM) -DGCC_VERSION=$(GCC_VERSION)-$(NOW) source/INSTALL-$(PLATFORM).m4 > INSTALL-FFIGEN-$(PLATFORM)-gcc-$(GCC_VERSION)-$(NOW).txt
 
 
-compile: mkdir build
+compile: patch
+	mkdir build
 	(cd build ; ../gcc-$(GCC_VERSION)/configure --enable-languages=objc $(CONFIGARGS) )
 ifeq ($(MAKE_FUNKY_LINK),YES)
 ifeq ($(OS),Darwin)
@@ -112,6 +114,14 @@ endif
 	(cd build/libcpp ; $(MAKE))
 	(cd build/gcc ; $(MAKE) cc1obj$(EXE) xlimits.h)
 
+patch: extract
+	ln -sf `pwd`/source/ffigen.c gcc-$(GCC_VERSION)/gcc
+	ln -sf `pwd`/source/ffigen.h gcc-$(GCC_VERSION)/gcc
+	printf "char *ffi_version = \42%s\42;\n" "$(NOW)" > gcc-$(GCC_VERSION)/gcc/ffi-version.h
+	for f in source/gcc-$(GCC_VERSION)*.diff ; do \
+	  (cd gcc-$(GCC_VERSION)/gcc; patch -p0 <../../$$f); \
+	done
+
 package: compile
 	mkdir bin
 	cat source/$(PLATFORM)-gcc-$(GCC_VERSION)-h-to-ffi.sh source/h-to-ffi-common >  bin/h-to-ffi.sh
@@ -130,4 +140,14 @@ endif
 	$(TAR) cfz ffigen-bin-$(PLATFORM)-gcc-$(GCC_VERSION)-$(NOW).tar.gz bin ffigen
 
 clean:
-	rm -rf ffigen build bin ffigen*tar.gz INSTALL-FFIGEN-$(PLATFORM)-gcc-$(GCC_VERSION)*.txt
+	rm -rf gcc-$(GCC_VERSION) ffigen build bin ffigen*tar.gz INSTALL-FFIGEN-$(PLATFORM)-gcc-$(GCC_VERSION)*.txt
+
+%.bz2:
+	@echo
+	@echo Obtain the file $@ from a GNU repository \(or gcc.gnu.org mirror\) and copy it to this directory.
+	@echo
+	@exit 2
+
+extract: $(ARCHIVES) clean
+	$(TAR) fxj gcc-core-$(GCC_VERSION).tar.bz2
+	$(TAR) fxj gcc-objc-$(GCC_VERSION).tar.bz2
