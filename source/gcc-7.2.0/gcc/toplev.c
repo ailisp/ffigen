@@ -96,6 +96,8 @@ along with GCC; see the file COPYING3.  If not see
 #include <isl/version.h>
 #endif
 
+#include "ffigen.h"
+
 static void general_init (const char *, bool);
 static void do_compile ();
 static void process_options (void);
@@ -702,7 +704,9 @@ print_version (FILE *file, const char *indent, bool show_global_state)
 	     indent, *indent != 0 ? " " : "",
 	     "MPC", MPC_VERSION_STRING, mpc_get_version ());
 
-  if (show_global_state)
+  if (flag_syntax_only)
+    print_ffi_version (file, indent);
+  else if (show_global_state)
     {
       fprintf (file,
 	       file == stderr ? _(fmt4) : fmt4,
@@ -1999,6 +2003,9 @@ do_compile ()
           invoke_plugin_callbacks (PLUGIN_START_UNIT, NULL);
 
           timevar_stop (TV_PHASE_SETUP);
+
+          if (flag_syntax_only)
+            ffi_init (asm_out_file, main_input_filename);
 
           compile_file ();
         }
