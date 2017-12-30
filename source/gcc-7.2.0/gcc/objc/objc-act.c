@@ -100,6 +100,8 @@ static unsigned int should_call_super_dealloc = 0;
 #define OBJC_FORWARDING_MIN_OFFSET 0
 #endif
 
+#include "ffigen.h"
+
 /*** Private Interface (procedures) ***/
 
 /* Init stuff.  */
@@ -8022,6 +8024,19 @@ finish_class (tree klass)
     default:
       gcc_unreachable ();
       break;
+    }
+    if (flag_syntax_only) {
+      switch (TREE_CODE (klass)) {
+      case CLASS_INTERFACE_TYPE:
+        ffi_rest_of_objc_class_compilation (klass);
+        break;
+      case CATEGORY_INTERFACE_TYPE:
+        ffi_rest_of_objc_category_compilation (klass);
+        break;
+      case PROTOCOL_INTERFACE_TYPE:
+        ffi_rest_of_objc_protocol_compilation (klass);
+        break;
+      }
     }
 }
 
