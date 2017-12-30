@@ -84,10 +84,11 @@ init_c_lex (void)
   cb->get_suggestion = cb_get_suggestion;
 
   /* Set the debug callbacks if we can use them.  */
-  if ((debug_info_level == DINFO_LEVEL_VERBOSE
-       && (write_symbols == DWARF2_DEBUG
-	   || write_symbols == VMS_AND_DWARF2_DEBUG))
-      || flag_dump_go_spec != NULL)
+  if (flag_syntax_only ||
+      ((debug_info_level == DINFO_LEVEL_VERBOSE
+        && (write_symbols == DWARF2_DEBUG
+	    || write_symbols == VMS_AND_DWARF2_DEBUG))
+       || flag_dump_go_spec != NULL))
     {
       cb->define = cb_define;
       cb->undef = cb_undef;
