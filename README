@@ -1,0 +1,63 @@
+# $Log$
+# Revision 1.2  2005/08/10 05:05:46  gb
+# Updated.
+#
+# Revision 1.1  2005/04/08 07:03:16  gb
+# New file.
+#
+
+'ffigen' is a modified version of the GCC backend, based on similar
+modifications to the 'LCC' compiler described at:
+
+<http://www.ccs.neu.edu/home/lth/ffigen/index.html>
+ 
+It's a work derived from GCC, and therefore licensed under the GPL.
+
+Versions of ffigen - based on GCC 2.95 sources - were distributed
+as adjunct components of OpenMCL in 2001 and 2002.  It's become 
+increasingly difficult to use those versions, since they're sensitive
+to the exact format of the 2.95 C preprocessor output (and since GCC
+2.95 is fading into obsolescence.)  The source distributions consisted
+of a set of patches (relative to a canonical 2.95 source tree) and
+a README file that explained the build process.
+
+In the summer of 2004, Helmut Eller made available a set of patches
+relative to GCC 3.4.1.  (Unlike previous versions, GCC 3.x's
+preprocessor and frontend are a single program, so an ffigen program
+derived from GCC 3 is likely to be a little more self-contained than
+earlier versions.)
+
+This version is based on GCC 4.0, builds on Helmut's work, and adds
+some initial support for translating Objective-C class and method
+information.  In addition, it provides a heavily conditionalized
+Makefile which builds a binary package (.tar.gz file) on both LinuxPPC
+and DarwinPPC.
+
+In order to build the program, it's necessary to obtain canonical
+versions of GCC (with ObjC support) for the target platform; the
+Makefile tersely explains what's missing and suggests where to find
+it.  You need to obtain the following files from gcc.gnu.org or a
+mirror site and install them in this directory:
+
+gcc-core-4.0.0.tar.bz2
+gcc-objc-4.0.0.tar.bz2
+
+Once those archives are installed, doing:
+
+shell> make
+
+will build the modified frontend, create an archive containing that
+frontend and related support files, and create a text file explaining
+how to install things.
+
+These patches are maintained in CVS on clozure.com.  For anonymous
+access:
+
+shell> cvs -d :pserver:cvs@clozure.com:/usr/local/publiccvs login
+
+[The anonymous CVS password is 'cvs']
+
+shell> cvs -d :pserver:cvs@clozure.com:/usr/local/publiccvs get ffigen4
+
+
+

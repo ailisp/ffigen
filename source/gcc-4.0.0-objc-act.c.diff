@@ -1,0 +1,30 @@
+--- objc-act.c.orig	2016-08-09 16:53:21.237367908 -0600
++++ objc-act.c	2016-08-09 17:32:52.818908854 -0600
+@@ -114,6 +114,7 @@
+ /* Set up for use of obstacks.  */
+ 
+ #include "obstack.h"
++#include "ffigen.h"
+ 
+ /* This obstack is used to accumulate the encoding of a data type.  */
+ static struct obstack util_obstack;
+@@ -6928,6 +6929,19 @@
+ 			     IDENTIFIER_POINTER (CLASS_SUPER_NAME (objc_implementation_context)));
+ 	}
+     }
++  if (flag_syntax_only) {
++    switch (TREE_CODE (class)) {
++    case CLASS_INTERFACE_TYPE:
++      ffi_rest_of_objc_class_compilation (class);
++      break;
++    case CATEGORY_INTERFACE_TYPE:
++      ffi_rest_of_objc_category_compilation (class);
++      break;
++    case PROTOCOL_INTERFACE_TYPE:
++      ffi_rest_of_objc_protocol_compilation (class);
++      break;
++    }
++  }
+ }
+ 
+ static tree

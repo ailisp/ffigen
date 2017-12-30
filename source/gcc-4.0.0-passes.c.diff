@@ -1,0 +1,20 @@
+--- passes.c.orig	2016-08-09 11:30:59.731582413 -0600
++++ passes.c	2016-08-09 11:41:56.619130467 -0600
+@@ -98,6 +98,7 @@
+ #include "xcoffout.h"		/* Needed for external data
+ 				   declarations for e.g. AIX 4.x.  */
+ #endif
++#include "ffigen.h"
+ 
+ #ifndef HAVE_conditional_execution
+ #define HAVE_conditional_execution 0
+@@ -255,6 +256,9 @@
+   /* Let cgraph know about the existance of variables.  */
+   if (TREE_CODE (decl) == VAR_DECL && !DECL_EXTERNAL (decl))
+     cgraph_varpool_node (decl);
++
++  if (flag_syntax_only) 
++    ffi_rest_of_decl_compilation (decl, top_level, at_end);
+ }
+ 
+ /* Called after finishing a record, union or enumeral type.  */
