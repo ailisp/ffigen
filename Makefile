@@ -108,11 +108,11 @@ ifeq ($(PLATFORM),win32)
 	(cd build ; ln -s . build-`../gcc-$(GCC_VERSION)/config.guess`)
 endif
 endif
-	(cd build ; $(MAKE) maybe-configure-libiberty maybe-configure-gcc maybe-configure-libcpp)
-	(cd build/libiberty ; $(MAKE))
-	(cd build/intl ; $(MAKE))
-	(cd build/libcpp ; $(MAKE))
-	(cd build/gcc ; $(MAKE) cc1obj$(EXE) xlimits.h)
+	(cd build ; $(MAKE) CFLAGS='-ansi' maybe-configure-libiberty maybe-configure-gcc maybe-configure-libcpp)
+	(cd build/libiberty ; $(MAKE) CFLAGS='-ansi' )
+	(cd build/intl ; $(MAKE) CFLAGS='-ansi' )
+	(cd build/libcpp ; $(MAKE) CFLAGS='-ansi' )
+	(cd build/gcc ; $(MAKE) CFLAGS='-ansi' cc1obj$(EXE) xlimits.h)
 
 patch: extract
 	ln -sf `pwd`/source/ffigen.c gcc-$(GCC_VERSION)/gcc
