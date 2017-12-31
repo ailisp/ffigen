@@ -23,8 +23,8 @@ COPY_OBJC_HEADERS = YES
 endif
 ifeq ($(ARCH), x86_64)
 PLATFORM = linuxx8664
-CONFIGTARGET = x86_64-unknown-linux
-CONFIGARGS = --target=$(CONFIGTARGET) --host=$(CONFIGTARGET) --enable-threads=posix --enable-biarch
+CONFIGTARGET = x86_64-pc-linux
+CONFIGARGS = --target=$(CONFIGTARGET) --host=$(CONFIGTARGET) --enable-threads=posix --disable-multilib
 MAKE_FUNKY_LINK = YES
 COPY_OBJC_HEADERS = YES
 endif
